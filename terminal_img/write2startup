@@ -1,0 +1,37 @@
+#!/bin/bash
+
+
+t=`echo $SHELL | grep -c 'zsh'` 
+if [[ $t>0  ]]
+then 
+	rc=$HOME/.zshrc
+else
+	rc=$HOME/.bashrc
+fi
+
+if [ ! -f "$rc" ]
+then
+	touch $rc
+fi
+
+dir=`pwd`
+temp=`grep -c "#Add_img2ascii_to_startup" $rc`
+whichpython=`python --version | grep -c "3.*"`
+if [[ $whichpython == 0 ]]
+then
+	python=python3
+else
+	python=python
+fi
+
+if [[ $temp == 0 ]]
+then
+	echo "#Add_img2ascii_to_startup" >> $rc
+	echo "export startup_foldr='`pwd`'" >> $rc
+	echo "$python \$startup_foldr/img2ascii.py" >> $rc 
+else
+	echo already existed.
+fi
+
+echo 已经添加到启动项啦
+$python img2ascii.py
